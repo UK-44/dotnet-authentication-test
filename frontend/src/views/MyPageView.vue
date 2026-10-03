@@ -5,11 +5,15 @@ import { currentUser } from '../api/auth'
 <template>
   <section class="card">
     <h2>マイページ</h2>
-    <dl>
-      <dt>ユーザー名</dt>
-      <dd>{{ currentUser?.userName }}</dd>
-      <dt>ID</dt>
-      <dd>{{ currentUser?.id }}</dd>
+    <dl class="info">
+      <div>
+        <dt>ユーザー名</dt>
+        <dd>{{ currentUser?.userName }}</dd>
+      </div>
+      <div>
+        <dt>ID</dt>
+        <dd>{{ currentUser?.id }}</dd>
+      </div>
     </dl>
   </section>
 </template>

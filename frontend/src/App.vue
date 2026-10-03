@@ -15,13 +15,13 @@ async function onLogout() {
     <div class="nav">
       <h1>ログインアプリ</h1>
       <RouterLink to="/">トップ</RouterLink>
-      <RouterLink to="/mypage">マイページ</RouterLink>
+      <RouterLink v-if="currentUser" to="/mypage">マイページ</RouterLink>
     </div>
     <div v-if="currentUser" class="user">
       <span>{{ currentUser.userName }}</span>
       <button class="secondary" @click="onLogout">ログアウト</button>
     </div>
-    <RouterLink v-else to="/login">ログイン</RouterLink>
+    <RouterLink v-else to="/login" class="secondary">ログイン</RouterLink>
   </header>
   <main>
     <RouterView />

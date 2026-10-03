@@ -7,21 +7,9 @@
   --primary: #2563eb;
   --primary-text: #ffffff;
   --error: #cf222e;
-  color-scheme: light dark;
+  color-scheme: light;
   font-family: system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
   line-height: 1.6;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --text: #e6edf3;
-    --muted: #8d96a0;
-    --border: #30363d;
-    --primary: #4c8dff;
-    --error: #ff7b72;
-  }
 }
 
 * { box-sizing: border-box; }
@@ -45,7 +33,6 @@ header h1 { font-size: 1.1rem; margin: 0; }
 header .user { display: flex; gap: 12px; align-items: center; }
 header .nav { display: flex; gap: 16px; align-items: center; }
 header a { color: var(--primary); text-decoration: none; }
-header a.router-link-exact-active { color: var(--text); font-weight: bold; }
 
 main {
   max-width: 480px;
@@ -66,9 +53,11 @@ main {
 .card h2 { margin: 0; }
 .card p { margin: 0; }
 
-dl { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 0; }
-dt { color: var(--muted); }
-dd { margin: 0; }
+dl.info { margin: 0; border: 1px solid var(--border); border-radius: 8px; }
+dl.info > div { display: grid; grid-template-columns: 7em 1fr; padding: 12px 16px; }
+dl.info > div + div { border-top: 1px solid var(--border); }
+dl.info dt { font-size: 0.9rem; color: var(--muted); }
+dl.info dd { margin: 0; font-weight: 600; }
 
 label {
   display: flex;
@@ -100,7 +89,7 @@ button {
 }
 
 button:disabled { opacity: 0.6; cursor: default; }
-button.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); padding: 6px 12px; font-size: 0.9rem; }
+button.secondary, a.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 0.9rem; line-height: normal; }
 button.link { background: none; color: var(--primary); padding: 0; }
 
 .hint { margin: -8px 0 0; font-size: 0.8rem; color: var(--muted); }
