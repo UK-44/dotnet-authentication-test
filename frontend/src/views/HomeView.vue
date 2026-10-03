@@ -4,7 +4,7 @@ import { currentUser } from '../api/auth'
 
 <template>
   <section class="card">
-    <h2>ようこそ、{{ currentUser?.userName }} さん</h2>
-    <p>ログインに成功しました。</p>
+    <h2>トップ</h2>
+    <p>{{ currentUser ? 'あなたはログイン中です' : 'あなたは未ログインです' }}</p>
   </section>
 </template>

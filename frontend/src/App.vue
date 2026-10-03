@@ -12,11 +12,16 @@ async function onLogout() {
 
 <template>
   <header>
-    <h1>ログインアプリ</h1>
+    <div class="nav">
+      <h1>ログインアプリ</h1>
+      <RouterLink to="/">トップ</RouterLink>
+      <RouterLink to="/mypage">マイページ</RouterLink>
+    </div>
     <div v-if="currentUser" class="user">
       <span>{{ currentUser.userName }}</span>
       <button class="secondary" @click="onLogout">ログアウト</button>
     </div>
+    <RouterLink v-else to="/login">ログイン</RouterLink>
   </header>
   <main>
     <RouterView />
