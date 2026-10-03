@@ -1,0 +1,99 @@
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --text: #1f2328;
+  --muted: #656d76;
+  --border: #d0d7de;
+  --primary: #2563eb;
+  --primary-text: #ffffff;
+  --error: #cf222e;
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  line-height: 1.6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --text: #e6edf3;
+    --muted: #8d96a0;
+    --border: #30363d;
+    --primary: #4c8dff;
+    --error: #ff7b72;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 { font-size: 1.1rem; margin: 0; }
+header .user { display: flex; gap: 12px; align-items: center; }
+
+main {
+  max-width: 480px;
+  margin: 48px auto;
+  padding: 0 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.card h2 { margin: 0; }
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+input {
+  padding: 10px 12px;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+input:focus { outline: 2px solid var(--primary); outline-offset: -1px; }
+
+button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  color: var(--primary-text);
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:disabled { opacity: 0.6; cursor: default; }
+button.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); padding: 6px 12px; font-size: 0.9rem; }
+button.link { background: none; color: var(--primary); padding: 0; }
+
+.hint { margin: -8px 0 0; font-size: 0.8rem; color: var(--muted); }
+.error { margin: 0; color: var(--error); white-space: pre-line; }
