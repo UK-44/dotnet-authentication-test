@@ -17,6 +17,11 @@ services:
     build: ./backend
     environment:
       ConnectionStrings__Default: "Server=mysql;Port=3306;Database=app;User=app;Password=app_password"
+      # パスキーの RP ID と許可するオリジン（ブラウザで開くフロントエンドの URL に合わせる）
+      Fido2__RPID: localhost
+      Fido2__RPName: ログインアプリ
+      Fido2__Origins__0: http://localhost:5173
+      Fido2__Timeout: "300000"
     depends_on:
       mysql:
         condition: service_healthy

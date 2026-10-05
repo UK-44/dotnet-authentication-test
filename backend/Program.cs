@@ -1,9 +1,11 @@
+using System.Threading.RateLimiting;
 using Backend.Auth;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +49,31 @@ builder.Services
     .Configure<ITicketStore>((options, store) => options.SessionStore = store);
 builder.Services.AddAuthorization();
 
+// RP ID・許可するオリジンは環境ごとに設定ファイルで固定する
+builder.Services.AddFido2(builder.Configuration.GetSection("Fido2"));
+
+// パスキーの登録・認証中に、発行したオプション（チャレンジを含む）を保持する。バックエンドは 1 台なのでメモリで十分
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "session";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<PendingCeremonyStore>();
+
+// 未ログインで呼べるパスキー認証のオプション発行 API は、IP ごとに回数を制限する
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy(RateLimitPolicies.PasskeyLogin, ctx => RateLimitPartition.GetFixedWindowLimiter(
+        ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(1) }));
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -59,6 +86,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseRateLimiter();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

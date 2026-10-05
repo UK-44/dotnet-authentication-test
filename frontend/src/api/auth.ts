@@ -4,7 +4,7 @@ export type User = { id: number; userName: string }
 
 export const currentUser = ref<User | null>(null)
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`/api${path}`, {
     credentials: 'same-origin',
     headers: { 'Content-Type': 'application/json' },

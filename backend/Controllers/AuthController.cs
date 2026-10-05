@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Backend.Auth;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -25,7 +26,7 @@ public class AuthController(AppDbContext db, IPasswordHasher<User> hasher) : Con
         db.Users.Add(user);
         await db.SaveChangesAsync();
 
-        await SignInAsync(user);
+        await HttpContext.SignInUserAsync(user);
         return new UserResponse(user.Id, user.UserName);
     }
 
@@ -37,7 +38,7 @@ public class AuthController(AppDbContext db, IPasswordHasher<User> hasher) : Con
             hasher.VerifyHashedPassword(user, user.PasswordHash, req.Password) == PasswordVerificationResult.Failed)
             return Unauthorized(new { message = "ユーザー名またはパスワードが正しくありません" });
 
-        await SignInAsync(user);
+        await HttpContext.SignInUserAsync(user);
         return new UserResponse(user.Id, user.UserName);
     }
 
@@ -55,17 +56,5 @@ public class AuthController(AppDbContext db, IPasswordHasher<User> hasher) : Con
     {
         var id = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         return new UserResponse(id, User.Identity!.Name!);
-    }
-
-    private Task SignInAsync(User user)
-    {
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.UserName),
-        };
-        var principal = new ClaimsPrincipal(
-            new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
-        return HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
     }
 }
